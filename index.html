@@ -1,0 +1,1353 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rutina Guerrero MMA/Boxeo - Gimnasio</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 50%, #0a0a0a 100%);
+            color: #ffffff;
+            padding: 20px;
+            min-height: 100vh;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1600px;
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: center;
+            padding: 60px 40px;
+            background: linear-gradient(135deg, rgba(220, 38, 38, 0.98) 0%, rgba(185, 28, 28, 0.98) 100%);
+            border-radius: 24px;
+            margin-bottom: 50px;
+            box-shadow: 0 25px 70px rgba(220, 38, 38, 0.4);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: repeating-linear-gradient(
+                45deg,
+                transparent,
+                transparent 10px,
+                rgba(255,255,255,0.02) 10px,
+                rgba(255,255,255,0.02) 20px
+            );
+        }
+
+        .header-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .header h1 {
+            font-size: 4em;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 5px;
+            margin-bottom: 20px;
+            text-shadow: 4px 4px 12px rgba(0, 0, 0, 0.7);
+        }
+
+        .header .subtitle {
+            font-size: 1.4em;
+            font-weight: 500;
+            opacity: 0.95;
+            letter-spacing: 2px;
+            margin-bottom: 15px;
+        }
+
+        .header .specs {
+            font-size: 1.1em;
+            opacity: 0.85;
+            letter-spacing: 1px;
+        }
+
+        .week-tabs {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 50px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .tab-btn {
+            padding: 20px 40px;
+            background: rgba(38, 38, 38, 0.9);
+            border: 2px solid rgba(220, 38, 38, 0.5);
+            color: #ffffff;
+            border-radius: 16px;
+            cursor: pointer;
+            font-weight: 700;
+            font-size: 1.1em;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            backdrop-filter: blur(10px);
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        .tab-btn:hover {
+            transform: translateY(-3px);
+            background: rgba(50, 50, 50, 0.95);
+            border-color: rgba(220, 38, 38, 0.8);
+            box-shadow: 0 10px 30px rgba(220, 38, 38, 0.3);
+        }
+
+        .tab-btn.active {
+            background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
+            border-color: #dc2626;
+            box-shadow: 0 10px 40px rgba(220, 38, 38, 0.5);
+        }
+
+        .day-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
+            gap: 35px;
+            margin-bottom: 50px;
+        }
+
+        .day-card {
+            background: linear-gradient(135deg, rgba(25, 25, 25, 0.98) 0%, rgba(18, 18, 18, 0.98) 100%);
+            border: 2px solid rgba(220, 38, 38, 0.4);
+            border-radius: 24px;
+            padding: 35px;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            backdrop-filter: blur(12px);
+            overflow: hidden;
+        }
+
+        .day-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 5px;
+            background: linear-gradient(90deg, #dc2626, #f97316, #dc2626);
+            opacity: 0.9;
+        }
+
+        .day-card:hover {
+            transform: translateY(-10px) scale(1.01);
+            box-shadow: 0 25px 60px rgba(220, 38, 38, 0.35);
+            border-color: rgba(220, 38, 38, 0.7);
+        }
+
+        .day-card.recovery {
+            border-color: rgba(16, 185, 129, 0.4);
+            background: linear-gradient(135deg, rgba(15, 35, 25, 0.98) 0%, rgba(10, 25, 18, 0.98) 100%);
+        }
+
+        .day-card.recovery::before {
+            background: linear-gradient(90deg, #10b981, #34d399, #10b981);
+        }
+
+        .day-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 28px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid rgba(220, 38, 38, 0.3);
+        }
+
+        .day-card.recovery .day-header {
+            border-bottom-color: rgba(16, 185, 129, 0.3);
+        }
+
+        .day-info h2 {
+            font-size: 2.3em;
+            color: #dc2626;
+            font-weight: 900;
+            text-transform: uppercase;
+            margin-bottom: 8px;
+            letter-spacing: 3px;
+        }
+
+        .day-card.recovery .day-info h2 {
+            color: #10b981;
+        }
+
+        .day-focus {
+            color: #a3a3a3;
+            font-size: 1em;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+        }
+
+        .duration {
+            background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
+            padding: 12px 24px;
+            border-radius: 14px;
+            font-weight: 800;
+            font-size: 1.05em;
+            box-shadow: 0 5px 15px rgba(220, 38, 38, 0.4);
+            letter-spacing: 1px;
+        }
+
+        .day-card.recovery .duration {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            box-shadow: 0 5px 15px rgba(16, 185, 129, 0.4);
+        }
+
+        .block {
+            background: rgba(12, 12, 12, 0.7);
+            border-left: 4px solid #dc2626;
+            padding: 25px;
+            margin: 25px 0;
+            border-radius: 14px;
+            transition: all 0.3s ease;
+        }
+
+        .block:hover {
+            background: rgba(18, 18, 18, 0.9);
+            border-left-width: 6px;
+            transform: translateX(3px);
+        }
+
+        .block.calentamiento {
+            border-left-color: #f97316;
+        }
+
+        .block.fuerza {
+            border-left-color: #dc2626;
+        }
+
+        .block.cardio {
+            border-left-color: #8b5cf6;
+        }
+
+        .block.vuelta {
+            border-left-color: #10b981;
+        }
+
+        .block-title {
+            font-size: 1.4em;
+            color: #dc2626;
+            margin-bottom: 20px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .block.calentamiento .block-title {
+            color: #f97316;
+        }
+
+        .block.cardio .block-title {
+            color: #8b5cf6;
+        }
+
+        .block.vuelta .block-title {
+            color: #10b981;
+        }
+
+        .exercise-group {
+            background: rgba(255, 255, 255, 0.03);
+            padding: 20px;
+            margin: 15px 0;
+            border-radius: 12px;
+            border-left: 3px solid rgba(220, 38, 38, 0.5);
+            transition: all 0.3s ease;
+        }
+
+        .exercise-group:hover {
+            background: rgba(220, 38, 38, 0.1);
+            border-left-width: 5px;
+            border-left-color: #dc2626;
+        }
+
+        .exercise-name {
+            font-weight: 800;
+            color: #f87171;
+            font-size: 1.15em;
+            margin-bottom: 10px;
+            letter-spacing: 0.5px;
+        }
+
+        .exercise-details {
+            color: #e5e5e5;
+            line-height: 1.8;
+            margin: 8px 0;
+        }
+
+        .exercise-note {
+            color: #a3a3a3;
+            font-size: 0.95em;
+            margin-top: 12px;
+            padding-top: 12px;
+            border-top: 1px solid rgba(255, 255, 255, 0.06);
+            line-height: 1.7;
+            font-style: italic;
+        }
+
+        .info-box {
+            background: linear-gradient(135deg, rgba(25, 25, 25, 0.98) 0%, rgba(18, 18, 18, 0.98) 100%);
+            border: 2px solid rgba(251, 146, 60, 0.4);
+            border-radius: 24px;
+            padding: 40px;
+            margin: 50px 0;
+            backdrop-filter: blur(12px);
+        }
+
+        .info-box h3 {
+            color: #fb923c;
+            font-size: 2em;
+            margin-bottom: 25px;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .info-box ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .info-box li {
+            padding: 16px 0;
+            padding-left: 35px;
+            position: relative;
+            line-height: 1.8;
+            color: #e5e5e5;
+        }
+
+        .info-box li:before {
+            content: "🔥";
+            position: absolute;
+            left: 0;
+            font-size: 1.3em;
+        }
+
+        .progression-section {
+            background: linear-gradient(135deg, rgba(30, 20, 50, 0.98) 0%, rgba(20, 15, 40, 0.98) 100%);
+            border: 2px solid rgba(168, 85, 247, 0.4);
+            border-radius: 24px;
+            padding: 40px;
+            margin: 50px 0;
+        }
+
+        .progression-section h3 {
+            color: #a855f7;
+            font-size: 2em;
+            margin-bottom: 30px;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .week-progress {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            margin-top: 30px;
+        }
+
+        .week-item {
+            background: rgba(168, 85, 247, 0.1);
+            border: 2px solid rgba(168, 85, 247, 0.35);
+            padding: 28px;
+            border-radius: 18px;
+            transition: all 0.3s ease;
+        }
+
+        .week-item:hover {
+            background: rgba(168, 85, 247, 0.15);
+            border-color: rgba(168, 85, 247, 0.6);
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(168, 85, 247, 0.25);
+        }
+
+        .week-item h4 {
+            color: #c084fc;
+            margin-bottom: 15px;
+            font-size: 1.4em;
+            font-weight: 800;
+        }
+
+        .week-item p {
+            color: #e5e5e5;
+            line-height: 1.8;
+            margin: 10px 0;
+        }
+
+        .final-box {
+            background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
+            padding: 50px;
+            border-radius: 24px;
+            margin-top: 50px;
+            text-align: center;
+            box-shadow: 0 25px 70px rgba(220, 38, 38, 0.5);
+        }
+
+        .final-box h2 {
+            font-size: 3em;
+            margin-bottom: 25px;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 4px;
+        }
+
+        .final-box p {
+            font-size: 1.3em;
+            line-height: 2;
+            font-weight: 500;
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2.5em;
+            }
+
+            .day-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .week-progress {
+                grid-template-columns: 1fr;
+            }
+
+            .tab-btn {
+                padding: 16px 28px;
+                font-size: 1em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="header-content">
+                <h1>⚔️ RUTINA GUERRERO COMPLETA</h1>
+                <p class="subtitle">GYM + MMA + BOXEO • CONSTRUCCIÓN REAL DE ATLETA</p>
+                <p class="specs">6 Días/Semana • Fuerza + Cardio + Técnica Diaria • Saco + Trote Obligatorio</p>
+            </div>
+        </div>
+
+        <div class="week-tabs">
+            <button class="tab-btn active" onclick="showSection('semana')">📅 RUTINA SEMANAL</button>
+            <button class="tab-btn" onclick="showSection('progresion')">📈 PROGRESIÓN & SISTEMA</button>
+            <button class="tab-btn" onclick="showSection('guia')">💡 GUÍA DE EJERCICIOS</button>
+        </div>
+
+        <!-- SECCIÓN: RUTINA SEMANAL -->
+        <div id="semana">
+            <div class="day-grid">
+                
+                <!-- ============================================ -->
+                <!-- LUNES: EMPUJE + CARDIO TÉCNICO -->
+                <!-- ============================================ -->
+                <div class="day-card">
+                    <div class="day-header">
+                        <div class="day-info">
+                            <h2>LUNES</h2>
+                            <div class="day-focus">Empuje Superior + Saco + Trote</div>
+                        </div>
+                        <div class="duration">75-90 min</div>
+                    </div>
+
+                    <!-- BLOQUE 1: CALENTAMIENTO -->
+                    <div class="block calentamiento">
+                        <div class="block-title">🔥 BLOQUE 1: CALENTAMIENTO</div>
+                        <div class="exercise-group">
+                            <div class="exercise-name">Trote suave en caminadora</div>
+                            <div class="exercise-details">5 minutos • Ritmo conversacional</div>
+                            <div class="exercise-note">Prepara sistema cardiovascular y eleva temperatura corporal.</div>
+                        </div>
+                        <div class="exercise-group">
+                            <div class="exercise-name">Movilidad dinámica</div>
+                            <div class="exercise-details">
+                                • Círculos de brazos: 10 adelante + 10 atrás<br>
+                                • Rotaciones de hombros: 15 rep<br>
+                                • Gatos-camellos: 10 rep<br>
+                                • Dislocaciones de hombro con banda: 12 rep
+                            </div>
+                            <div class="exercise-note">Enfoque en hombros y pecho para el trabajo de empuje.</div>
+                        </div>
+                        <div class="exercise-group">
+                            <div class="exercise-name">Activación específica</div>
+                            <div class="exercise-details">
+                                • Flexiones lentas: 2 series x 8 rep<br>
+                                • Press con barra vacía: 2 series x 10 rep<br>
+                                • Band pull-aparts: 2 series x 15 rep
+                            </div>
+                            <div class="exercise-note">Activa músculos que vas a trabajar pesado.</div>
+                        </div>
+                    </div>
+
+                    <!-- BLOQUE 2: FUERZA -->
+                    <div class="block fuerza">
+                        <div class="block-title">💪 BLOQUE 2: FUERZA FUNCIONAL - EMPUJE</div>
+                        <div class="exercise-group">
+                            <div class="exercise-name">Press Banca con Barra</div>
+                            <div class="exercise-details">4 series x 6-8 repeticiones</div>
+                            <div class="exercise-note">Rey del empuje. Genera potencia de golpe. Descanso 2-3 min.</div>
+                        </div>
+                        <div class="exercise-group">
+                            <div class="exercise-name">Press Militar con Barra de Pie</div>
+                            <div class="exercise-details">4 series x 8-10 repeticiones</div>
+                            <div class="exercise-note">Core antiextensión + potencia de hombro. Esencial para uppercuts y golpes altos.</div>
+                        </div>
+                        <div class="exercise-group">
+                            <div class="exercise-name">Fondos en Paralelas</div>
+                            <div class="exercise-details">3 series x 10-12 repeticiones (con peso adicional si es fácil)</div>
+                            <div class="exercise-note">Pecho, tríceps, hombros. Fuerza funcional para clinch y empujes.</div>
+                        </div>
+                        <div class="exercise-group">
+                            <div class="exercise-name">Press Inclinado con Mancuernas</div>
+                            <div class="exercise-details">3 series x 10-12 repeticiones</div>
+                            <div class="exercise-note">Trabajo unilateral, activa core para estabilización.</div>
+                        </div>
+                        <div class="exercise-group">
+                            <div class="exercise-name">Landmine Press Unilateral</div>
+                            <div class="exercise-details">3 series x 8-10 rep cada brazo</div>
+                            <div class="exercise-note">Rotación de tronco + empuje = mecánica de golpe perfecta.</div>
+                        </div>
+                    </div>
+
+                    <!-- BLOQUE 3: CARDIO TÉCNICO -->
+                    <div class="block cardio">
+                        <div class="block-title">🥊 BLOQUE 3: CARDIO TÉCNICO - SACO + TROTE</div>
+                        <div class="exercise-group">
+                            <div class="exercise-name">Trabajo de Saco de Boxeo</div>
+                            <div class="exercise-details">
+                                6 rounds x 3 minutos (1 min descanso)<br><br>
+                                <strong>Estructura por round:</strong><br>
+                                • Rounds 1-2: Técnica pura (jab-cross-hook, velocidad controlada)<br>
+                                • Rounds 3-4: Potencia (golpes fuertes, combos de 4-6 golpes)<br>
+                                • Rounds 5-6: Resistencia (volumen alto, mantén ritmo sin parar)
+                            </div>
+                            <div class="exercise-note">Trabajo diario obligatorio. Desarrolla timing, potencia, resistencia de hombros y cardio específico.</div>
+                        </div>
+                        <div class="exercise-group">
+                            <div class="exercise-name">Trote en Caminadora o Pista</div>
+                            <div class="exercise-details">20-25 minutos • Ritmo constante moderado</div>
+                            <div class="exercise-note">Tu tanque de gasolina. Construye base aeróbica para aguantar rounds largos.</div>
+                        </div>
+                    </div>
+
+                    <!-- BLOQUE 4: VUELTA A LA CALMA -->
+                    <div class="block vuelta">
+                        <div class="block-title">🧘 BLOQUE 4: VUELTA A LA CALMA</div>
+                        <div class="exercise-group">
+                            <div class="exercise-name">Estiramiento profundo</div>
+                            <div class="exercise-details">
+                                • Pecho en esquina: 45 seg cada brazo<br>
+                                • Hombros cruzados: 30 seg cada lado<br>
+                                • Tríceps overhead: 30 seg cada brazo<br>
+                                • Respiración diafragmática: 3 min
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ============================================ -->
+                <!-- MARTES: PIERNAS + POTENCIA + SACO + TROTE -->
+                <!-- ============================================ -->
+                <div class="day-card">
+                    <div class="day-header">
+                        <div class="day-info">
+                            <h2>MARTES</h2>
+                            <div class="day-focus">Piernas + Explosividad + Saco + Trote</div>
+                        </div>
+                        <div class="duration">80-95 min</div>
+                    </div>
+
+                    <!-- BLOQUE 1: CALENTAMIENTO -->
+                    <div class="block calentamiento">
+                        <div class="block-title">🔥 BLOQUE 1: CALENTAMIENTO</div>
+                        <div class="exercise-group">
+                            <div class="exercise-name">Cardio ligero + movilidad</div>
+                            <div class="exercise-details">
+                                • 5 min bici estática (nivel bajo)<br>
+                                • Círculos de cadera: 15 cada dirección<br>
+                                • Zancadas caminando: 10 cada pierna<br>
+                                • Sentadillas sin peso: 15 rep<br>
+                                • Activación de glúteos con banda: 2x15
+                            </div>
+                        </div>
+                        <div class="exercise-group">
+                            <div class="exercise-name">Series de calentamiento</div>
+                            <div class="exercise-details">
+                                • Sentadilla goblet con mancuerna: 2x10<br>
+                                • Peso muerto rumano con barra vacía: 2x10
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- BLOQUE 2: FUERZA -->
+                    <div class="block fuerza">
+                        <div class="block-title">💪 BLOQUE 2: FUERZA FUNCIONAL - PIERNAS</div>
+                        <div class="exercise-group">
+                            <div class="exercise-name">Sentadilla Trasera con Barra</div>
+                            <div class="exercise-details">4 series x 6-8 repeticiones</div>
+                            <div class="exercise-note">Ejercicio rey para piernas. Potencia para derribos, patadas y explosividad general.</div>
+                        </div>
+                        <div class="exercise-group">
+                            <div class="exercise-name">Peso Muerto Rumano</div>
+                            <div class="exercise-details">4 series x 8-10 repeticiones</div>
+                            <div class="exercise-note">Cadena posterior brutal: glúteos, femorales, lumbares. Potencia de cadera = golpes devastadores.</div>
+                        </div>
+                        <div class="exercise-group">
+                            <div class="exercise-name">Zancadas Caminando con Mancuernas</div>
+                            <div class="exercise-details">3 series x 10 rep cada pierna</div>
+                            <div class="exercise-note">Estabilidad unilateral, equilibrio y fuerza funcional para desplazamientos.</div>
+                        </div>
+                        <div class="exercise-group">
+                            <div class="exercise-name">Box Jumps (Saltos al Cajón)</div>
+                            <div class="exercise-details">4 series x 6-8 saltos explosivos</div>
+                            <div class="exercise-note">Potencia explosiva pura. Descanso completo entre series (2 min).</div>
+                        </div>
+                        <div class="exercise-group">
+                            <div class="exercise-name">Prensa de Pierna</div>
+                            <div class="exercise-details">3 series x 12-15 repeticiones</div>
+                            <div class="exercise-note">Volumen adicional sin fatiga del core. Construcción de masa en cuádriceps.</div>
+                        </div>
+                    </div>
+
+                    <!-- BLOQUE 3: CARDIO TÉCNICO -->
+                    <div class="block cardio">
+                        <div class="block-title">🥊 BLOQUE 3: CARDIO TÉCNICO - SACO + TROTE</div>
+                        <div class="exercise-group">
+                            <div class="exercise-name">Trabajo de Saco - Énfasis en Rotación</div>
+                            <div class="exercise-details">
+                                6 rounds x 3 minutos (1 min descanso)<br><br>
+                                • Rounds 1-2: Hooks y uppercuts (rotación de cadera)<br>
+                                • Rounds 3-4: Combos con pivoteo de pies<br>
+                                • Rounds 5-6: Ritmo alto con desplazamientos constantes
+                            </div>
+                            <div class="exercise-note">Después de piernas, tu core y rotación de cadera se activan al máximo.</div>
+                        </div>
+                        <div class="exercise-group">
+                            <div class="exercise-name">Trote Moderado</div>
+                            <div class="exercise-details">20 minutos • Ritmo constante</div>
+                            <div class="exercise-note">Después de piernas pesadas, el trote también entrena resistencia mental.</div>
+                        </div>
+                    </div>
+
+                    <!-- BLOQUE 4: VUELTA A LA CALMA -->
+                    <div class="block vuelta">
+                        <div class="block-title">🧘 BLOQUE 4: VUELTA A LA CALMA</div>
+                        <div class="exercise-group">
+                            <div class="exercise-name">Estiramiento profundo de piernas</div>
+                            <div class="exercise-details">
+                                • Cuádriceps de pie: 45 seg cada pierna<br>
+                                • Isquios sentado: 60 seg<br>
+                                • Pigeon pose: 60 seg cada lado<br>
+                                • Mariposa: 60 seg
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ============================================ -->
+                <!-- MIÉRCOLES: JALÓN + CORE + HIIT + SACO + TROTE -->
+                <!-- ============================================ -->
+                <div class="day-card">
+                    <div class="day-header">
+                        <div class="day-info">
+                            <h2>MIÉRCOLES</h2>
+                            <div class="day-focus">Jalón + Core + HIIT + Saco + Trote</div>
+                        </div>
+                        <div class="duration">75-90 min</div>
+                    </div>
+
+                    <!-- BLOQUE 1: CALENTAMIENTO -->
+                    <div class="block calentamiento">
+                        <div class="block-title">🔥 BLOQUE 1: CALENTAMIENTO</div>
+                        <div class="exercise-group">
+                            <div class="exercise-name">Cardio + movilidad espalda</div>
+                            <div class="exercise-details">
+                                • 5 min remo ergómetro (ritmo ligero)<br>
+                                • Gatos-camellos: 12 rep<br>
+                                • Dead hangs en barra: 2x20 seg<br>
+                                • Band pull-aparts: 2x20 rep
+                            </div>
+                        </div>
+                        <div class="exercise-group">
+                            <div class="exercise-name">Activación dorsal</div>
+                            <div class="exercise-details">
+                                • Remo en polea baja (peso ligero): 2x12<br>
+                                • Jalón al pecho (peso ligero): 2x12
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- BLOQUE 2: FUERZA -->
+                    <div class="block fuerza">
+                        <div class="block-title">💪 BLOQUE 2: FUERZA FUNCIONAL - JALÓN</div>
+                        <div class="exercise-group">
+                            <div class="exercise-name">Peso Muerto Convencional</div>
+                            <div class="exercise-details">4 series x 5-6 repeticiones</div>
+                            <div class="exercise-note">El rey absoluto. Trabaja TODO: espalda, piernas, core, agarre. Fuerza total del guerrero.</div>
+                        </div>
+                        <div class="exercise-group">
+                            <div class="exercise-name">Dominadas (Pull-ups)</div>
+                            <div class="exercise-details">4 series al fallo (mínimo 6-8 rep)</div>
+                            <div class="exercise-note">Si no llegas a 6, usa banda de asistencia. Espalda ancha + agarre de hierro.</div>
+                        </div>
+                        <div class="exercise-group">
+                            <div class="exercise-name">Remo con Barra (Pendlay Row)</div>
+                            <div class="exercise-details">4 series x 8-10 repeticiones</div>
+                            <div class="exercise-note">Explosividad + masa en espalda media. Crucial para clinch y control.</div>
+                        </div>
+                        <div class="exercise-group">
+                            <div class="exercise-name">Remo en Polea Baja (Cable Row)</div>
+                            <div class="exercise-details">3 series x 12-15 repeticiones</div>
+                            <div class="exercise-note">Volumen en dorsales y romboides. Squeeze máximo al final.</div>
+                        </div>
+                        <div class="exercise-group">
+                            <div class="exercise-name">Face Pulls con Cuerda</div>
+                            <div class="exercise-details">3 series x 15-20 repeticiones</div>
+                            <div class="exercise-note">Salud de hombro, postura, deltoides posteriores. Prevención de lesiones.</div>
+                        </div>
+                    </div>
+
+                    <!-- BLOQUE 3: CARDIO TÉCNICO -->
+                    <div class="block cardio">
+                        <div class="block-title">🥊 BLOQUE 3: CARDIO TÉCNICO - HIIT + SACO + TROTE</div>
+                        <div class="exercise-group">
+                            <div class="exercise-name">Circuito HIIT Funcional</div>
+                            <div class="exercise-details">
+                                4 rondas sin descanso (2 min descanso entre rondas):<br><br>
+                                • Burpees: 15 rep<br>
+                                • Kettlebell swings: 20 rep<br>
+                                • Battle ropes: 30 seg intenso<br>
+                                • Box step-ups alternados: 20 rep (10 cada pierna)<br>
+                                • Mountain climbers: 40 seg
+                            </div>
+                            <div class="exercise-note">Simula la intensidad de combate real. Potencia + resistencia.</div>
+                        </div>
+                        <div class="exercise-group">
+                            <div class="exercise-name">Trabajo de Saco - Resistencia</div>
+                            <div class="exercise-details">
+                                4 rounds x 3 minutos (45 seg descanso)<br><br>
+                                • Ritmo alto constante<br>
+                                • Combos de 3-5 golpes sin parar<br>
+                                • Enfoque: no bajar intensidad
+                            </div>
+                            <div class="exercise-note">Después del HIIT brutal, simulas la fatiga del round 4-5 de una pelea.</div>
+                        </div>
+                        <div class="exercise-group">
+                            <div class="exercise-name">Trote Continuo</div>
+                            <div class="exercise-details">15-20 minutos • Ritmo cómodo</div>
+                            <div class="exercise-note">Recuperación activa después de la guerra HIIT.</div>
+                        </div>
+                    </div>
+
+                    <!-- BLOQUE 4: VUELTA A LA CALMA -->
+                    <div class="block vuelta">
+                        <div class="block-title">🧘 BLOQUE 4: VUELTA A LA CALMA</div>
+                        <div class="exercise-group">
+                            <div class="exercise-name">Estiramiento de espalda y core</div>
+                            <div class="exercise-details">
+                                • Child's pose: 60 seg<br>
+                                • Cat-cow lento: 15 rep<br>
+                                • Torsión espinal sentado: 45 seg cada lado<br>
+                                • Dead hang relajado: 30 seg
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ============================================ -->
+                <!-- JUEVES: TÉCNICA + MOVILIDAD + SACO + TROTE -->
+                <!-- ============================================ -->
+                <div class="day-card">
+                    <div class="day-header">
+                        <div class="day-info">
+                            <h2>JUEVES</h2>
+                            <div class="day-focus">Día Técnico + Movilidad + Saco + Trote</div>
+                        </div>
+                        <div class="duration">60-75 min</div>
+                    </div>
+
+                    <!-- BLOQUE 1: CALENTAMIENTO -->
+                    <div class="block calentamiento">
+                        <div class="block-title">🔥 BLOQUE 1: CALENTAMIENTO COMPLETO</div>
+                        <div class="exercise-group">
+                            <div class="exercise-name">Cardio ligero + movilidad total</div>
+                            <div class="exercise-details">
+                                • 5 min elíptica (nivel bajo)<br>
+                                • Secuencia de movilidad: 10 min<br>
+                                &nbsp;&nbsp;- Círculos articulares (cuello, hombros, codos, muñecas, cadera, rodillas, tobillos)<br>
+                                &nbsp;&nbsp;- Cossack squats: 8 cada lado<br>
+                                &nbsp;&nbsp;- 90/90 hip switches: 10 rep<br>
+                                &nbsp;&nbsp;- World's greatest stretch: 5 cada lado<br>
+                                &nbsp;&nbsp;- Inchworms: 8 rep
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- BLOQUE 2: FUERZA LIGERA/TÉCNICA -->
+                    <div class="block fuerza">
+                        <div class="block-title">💪 BLOQUE 2: TRABAJO LIGERO + CORE DE COMBATE</div>
+                        <div class="exercise-group">
+                            <div class="exercise-name">Circuito de Fuerza Corporal (3 rondas)</div>
+                            <div class="exercise-details">
+                                • Flexiones con rotación: 12 rep<br>
+                                • Sentadillas búlgaras: 10 cada pierna<br>
+                                • Plancha con toque de hombro: 20 rep<br>
+                                • Inverted rows en TRX: 12 rep<br>
+                                • Farmer's walk: 40 metros
+                            </div>
+                            <div class="exercise-note">Día de recuperación activa. Intensidad moderada, enfoque en movimiento de calidad.</div>
+                        </div>
+                        <div class="exercise-group">
+                            <div class="exercise-name">Core Anti-Rotacional</div>
+                            <div class="exercise-details">
+                                3 series:<br>
+                                • Pallof press: 12 rep cada lado<br>
+                                • Dead bug: 20 rep<br>
+                                • Bird dog: 15 rep cada lado<br>
+                                • Plancha lateral: 40 seg cada lado
+                            </div>
+                            <div class="exercise-note">Core funcional para absorber golpes y generar potencia rotacional.</div>
+                        </div>
+                    </div>
+
+                    <!-- BLOQUE 3: CARDIO TÉCNICO -->
+                    <div class="block cardio">
+                        <div class="block-title">🥊 BLOQUE 3: CARDIO TÉCNICO - SACO + TROTE</div>
+                        <div class="exercise-group">
+                            <div class="exercise-name">Trabajo de Saco - TÉCNICA PURA</div>
+                            <div class="exercise-details">
+                                8 rounds x 2 minutos (1 min descanso)<br><br>
+                                • Round 1-2: Solo jabs (diferentes alturas y ángulos)<br>
+                                • Round 3-4: Jab-cross (enfoque en rotación perfecta)<br>
+                                • Round 5-6: Combos de 3-4 golpes (precisión)<br>
+                                • Round 7-8: Defensa + contraataque (esquivas imaginarias + respuesta)
+                            </div>
+                            <div class="exercise-note">HOY ES DÍA DE CALIDAD, NO CANTIDAD. Cada golpe perfecto.</div>
+                        </div>
+                        <div class="exercise-group">
+                            <div class="exercise-name">Trote Técnico con Intervalos de Sombra</div>
+                            <div class="exercise-details">
+                                20 minutos:<br>
+                                • 2 min trote ligero<br>
+                                • 30 seg shadow boxing técnico<br>
+                                • Repetir ciclo
+                            </div>
+                            <div class="exercise-note">Mantén técnica perfecta incluso mientras troteas. Entrena cerebro + cuerpo.</div>
+                        </div>
+                    </div>
+
+                    <!-- BLOQUE 4: VUELTA A LA CALMA -->
+                    <div class="block vuelta">
+                        <div class="block-title">🧘 BLOQUE 4: MOVILIDAD PROFUNDA</div>
+                        <div class="exercise-group">
+                            <div class="exercise-name">Yoga flow para peleadores</div>
+                            <div class="exercise-details">
+                                15-20 minutos:<br>
+                                • Perro boca abajo: 60 seg<br>
+                                • Cobra: 30 seg<br>
+                                • Postura del guerrero: 45 seg cada lado<br>
+                                • Pigeon pose: 90 seg cada lado<br>
+                                • Torsiones espinales: 60 seg cada lado<br>
+                                • Respiración diafragmática: 5 min
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ============================================ -->
+                <!-- VIERNES: FULL BODY + POTENCIA + SACO + TROTE -->
+                <!-- ============================================ -->
+                <div class="day-card">
+                    <div class="day-header">
+                        <div class="day-info">
+                            <h2>VIERNES</h2>
+                            <div class="day-focus">Full Body + Explosividad + Saco + Trote</div>
+                        </div>
+                        <div class="duration">80-95 min</div>
+                    </div>
+
+                    <!-- BLOQUE 1: CALENTAMIENTO -->
+                    <div class="block calentamiento">
+                        <div class="block-title">🔥 BLOQUE 1: CALENTAMIENTO DINÁMICO</div>
+                        <div class="exercise-group">
+                            <div class="exercise-name">Activación completa</div>
+                            <div class="exercise-details">
+                                • 5 min assault bike (ritmo moderado)<br>
+                                • Jumping jacks: 30 rep<br>
+                                • Inchworms: 10 rep<br>
+                                • Sentadillas jump: 10 rep<br>
+                                • Flexiones explosivas: 8 rep<br>
+                                • High knees: 30 seg
+                            </div>
+                            <div class="exercise-note">Preparación para trabajo explosivo. Activa sistema nervioso.</div>
+                        </div>
+                    </div>
+
+                    <!-- BLOQUE 2: FUERZA -->
+                    <div class="block fuerza">
+                        <div class="block-title">💪 BLOQUE 2: FUERZA EXPLOSIVA - FULL BODY</div>
+                        <div class="exercise-group">
+                            <div class="exercise-name">Power Clean (Cargada de Potencia)</div>
+                            <div class="exercise-details">5 series x 3-5 repeticiones</div>
+                            <div class="exercise-note">EXPLOSIVIDAD TOTAL. Si no dominas técnica, haz kettlebell swings pesados (5x10).</div>
+                        </div>
+                        <div class="exercise-group">
+                            <div class="exercise-name">Sentadilla Frontal</div>
+                            <div class="exercise-details">4 series x 6-8 repeticiones</div>
+                            <div class="exercise-note">Cuádriceps + core brutal. Mantén torso erguido.</div>
+                        </div>
+                        <div class="exercise-group">
+                            <div class="exercise-name">Press Banca con Cadenas o Pausa</div>
+                            <div class="exercise-details">4 series x 6-8 rep (2 seg pausa en pecho)</div>
+                            <div class="exercise-note">Variante para romper mesetas y generar potencia desde posición muerta.</div>
+                        </div>
+                        <div class="exercise-group">
+                            <div class="exercise-name">Remo con Mancuerna a Una Mano</div>
+                            <div class="exercise-details">3 series x 10 rep cada brazo</div>
+                            <div class="exercise-note">Fuerza unilateral, antirotación, masa en dorsales.</div>
+                        </div>
+                        <div class="exercise-group">
+                            <div class="exercise-name">Thrusters con Mancuernas</div>
+                            <div class="exercise-details">3 series x 12 repeticiones</div>
+                            <div class="exercise-note">Sentadilla + press = movimiento funcional total. Quema metabólica brutal.</div>
+                        </div>
+                    </div>
+
+                    <!-- BLOQUE 3: CARDIO TÉCNICO -->
+                    <div class="block cardio">
+                        <div class="block-title">🥊 BLOQUE 3: CARDIO TÉCNICO - SACO + TROTE LARGO</div>
+                        <div class="exercise-group">
+                            <div class="exercise-name">Trabajo de Saco - Potencia + Volumen</div>
+                            <div class="exercise-details">
+                                6 rounds x 3 minutos (1 min descanso)<br><br>
+                                • Rounds 1-3: Potencia máxima (cada golpe con intención de KO)<br>
+                                • Rounds 4-6: Alto volumen (combos rápidos sin parar)
+                            </div>
+                            <div class="exercise-note">Después de explosivos pesados, tu potencia de golpe está en pico máximo.</div>
+                        </div>
+                        <div class="exercise-group">
+                            <div class="exercise-name">Trote Largo en Terreno Variado</div>
+                            <div class="exercise-details">30-35 minutos • Ritmo moderado-fuerte</div>
+                            <div class="exercise-note">Si tienes acceso a exterior, busca colinas. Si no, inclinación en caminadora.</div>
+                        </div>
+                    </div>
+
+                    <!-- BLOQUE 4: VUELTA A LA CALMA -->
+                    <div class="block vuelta">
+                        <div class="block-title">🧘 BLOQUE 4: VUELTA A LA CALMA</div>
+                        <div class="exercise-group">
+                            <div class="exercise-name">Estiramiento completo</div>
+                            <div class="exercise-details">
+                                • Estiramiento de cuádriceps: 45 seg cada lado<br>
+                                • Estiramiento de isquios: 60 seg<br>
+                                • Pecho y hombros: 45 seg cada lado<br>
+                                • Foam rolling: 5-10 min (piernas, espalda, glúteos)
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ============================================ -->
+                <!-- SÁBADO: DÍA DEL GUERRERO - TEST TOTAL -->
+                <!-- ============================================ -->
+                <div class="day-card">
+                    <div class="day-header">
+                        <div class="day-info">
+                            <h2>SÁBADO</h2>
+                            <div class="day-focus">Día del Guerrero - Simulación de Combate</div>
+                        </div>
+                        <div class="duration">90-110 min</div>
+                    </div>
+
+                    <!-- BLOQUE 1: CALENTAMIENTO -->
+                    <div class="block calentamiento">
+                        <div class="block-title">🔥 BLOQUE 1: CALENTAMIENTO EXTENSO</div>
+                        <div class="exercise-group">
+                            <div class="exercise-name">Preparación de batalla</div>
+                            <div class="exercise-details">
+                                • 8 min trote ligero<br>
+                                • 5 min movilidad dinámica completa<br>
+                                • 3 min shadow boxing ligero<br>
+                                • 2 min respiración y mentalización
+                            </div>
+                            <div class="exercise-note">HOY ES TU DÍA DE PRUEBA. Prepara cuerpo y mente.</div>
+                        </div>
+                    </div>
+
+                    <!-- BLOQUE 2: FUERZA/METCON -->
+                    <div class="block fuerza">
+                        <div class="block-title">💪 BLOQUE 2: CIRCUITO METABÓLICO BRUTAL</div>
+                        <div class="exercise-group">
+                            <div class="exercise-name">El Desafío del Guerrero (5 rondas completas)</div>
+                            <div class="exercise-details">
+                                Completa las 5 rondas lo más rápido posible:<br><br>
+                                • 15 Burpees<br>
+                                • 20 Kettlebell swings (peso desafiante)<br>
+                                • 25 Sentadillas jump<br>
+                                • 30 Mountain climbers<br>
+                                • 20 V-ups<br>
+                                • 15 Thrusters con mancuernas<br>
+                                • 1 min shadow boxing intenso
+                            </div>
+                            <div class="exercise-note">Registra tu tiempo. El objetivo es mejorar cada semana. Descansa solo cuando sea absolutamente necesario.</div>
+                        </div>
+                    </div>
+
+                    <!-- BLOQUE 3: CARDIO TÉCNICO -->
+                    <div class="block cardio">
+                        <div class="block-title">🥊 BLOQUE 3: SIMULACIÓN DE COMBATE REAL</div>
+                        <div class="exercise-group">
+                            <div class="exercise-name">Rounds Estilo UFC (5 rounds x 5 min / 1 min descanso)</div>
+                            <div class="exercise-details">
+                                Cada round de 5 minutos se divide así:<br><br>
+                                <strong>Minuto 1:</strong> Shadow boxing técnico (stance, movimiento, defensas)<br>
+                                <strong>Minuto 2:</strong> Saco de boxeo - potencia máxima<br>
+                                <strong>Minuto 3:</strong> Sprints cortos (10 seg sprint / 20 seg trote x 2)<br>
+                                <strong>Minuto 4:</strong> Trabajo de suelo (shrimps, technical stand-ups, sprawls)<br>
+                                <strong>Minuto 5:</strong> Saco de boxeo - máxima intensidad hasta la campana
+                            </div>
+                            <div class="exercise-note">ESTO ES UNA PELEA REAL. Simula fatiga, toma decisiones bajo presión, mantén técnica en el caos.</div>
+                        </div>
+                        <div class="exercise-group">
+                            <div class="exercise-name">Finisher: 100 Burpees por Tiempo</div>
+                            <div class="exercise-details">
+                                Completa 100 burpees lo más rápido posible<br>
+                                Objetivo: menos de 12 minutos
+                            </div>
+                            <div class="exercise-note">El verdadero test de un guerrero. Cuando creas que no puedes más, ahí empieza la forja.</div>
+                        </div>
+                        <div class="exercise-group">
+                            <div class="exercise-name">Trote de Recuperación Activa</div>
+                            <div class="exercise-details">15 minutos • Ritmo MUY suave</div>
+                            <div class="exercise-note">Después de la guerra, recupera con movimiento ligero.</div>
+                        </div>
+                    </div>
+
+                    <!-- BLOQUE 4: VUELTA A LA CALMA -->
+                    <div class="block vuelta">
+                        <div class="block-title">🧘 BLOQUE 4: RECUPERACIÓN PROFUNDA</div>
+                        <div class="exercise-group">
+                            <div class="exercise-name">Sesión de estiramiento y mentalización</div>
+                            <div class="exercise-details">
+                                • Estiramiento completo: 10 min<br>
+                                • Respiración diafragmática: 5 min<br>
+                                • Visualización de objetivos: 5 min
+                            </div>
+                            <div class="exercise-note">Celebra tu victoria semanal. Eres más fuerte que hace 7 días.</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ============================================ -->
+                <!-- DOMINGO: RECUPERACIÓN ACTIVA -->
+                <!-- ============================================ -->
+                <div class="day-card recovery">
+                    <div class="day-header">
+                        <div class="day-info">
+                            <h2>DOMINGO</h2>
+                            <div class="day-focus">Recuperación Activa Inteligente</div>
+                        </div>
+                        <div class="duration">45-60 min</div>
+                    </div>
+
+                    <div class="block vuelta">
+                        <div class="block-title">🌿 RECUPERACIÓN DEL GUERRERO</div>
+                        <div class="exercise-group">
+                            <div class="exercise-name">Actividad de Baja Intensidad</div>
+                            <div class="exercise-details">
+                                Elige una opción:<br>
+                                • Caminata larga: 40-50 min (naturaleza preferible)<br>
+                                • Natación suave: 30 min<br>
+                                • Bicicleta ligera: 40 min<br>
+                                • Yoga completo: 45 min
+                            </div>
+                            <div class="exercise-note">NADA INTENSO. El objetivo es mover sangre, oxigenar músculos, recuperar.</div>
+                        </div>
+                        <div class="exercise-group">
+                            <div class="exercise-name">Movilidad y estiramiento profundo</div>
+                            <div class="exercise-details">
+                                20-30 minutos:<br>
+                                • Foam rolling completo: 10 min<br>
+                                • Secuencia de yoga restaurativo: 15 min<br>
+                                • Enfoque en áreas tensas y doloridas
+                            </div>
+                        </div>
+                        <div class="exercise-group">
+                            <div class="exercise-name">Trabajo de recuperación mental</div>
+                            <div class="exercise-details">
+                                • Meditación: 10 min<br>
+                                • Visualización de técnicas perfectas: 5 min<br>
+                                • Planificación de la semana siguiente: 5 min
+                            </div>
+                            <div class="exercise-note">La mente también necesita recuperarse. Un guerrero entrena cerebro y cuerpo.</div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- ============================================ -->
+        <!-- SECCIÓN: PROGRESIÓN & SISTEMA -->
+        <!-- ============================================ -->
+        <div id="progresion" style="display: none;">
+            <div class="progression-section">
+                <h3>📈 SISTEMA DE PROGRESIÓN MENSUAL</h3>
+                
+                <div class="week-progress">
+                    <div class="week-item">
+                        <h4>🔹 Semanas 1-2: ADAPTACIÓN</h4>
+                        <p><strong>Pesas:</strong> Usa el rango bajo de repeticiones (6-8 en vez de 8-10).</p>
+                        <p><strong>Peso:</strong> 70-75% de tu máximo estimado.</p>
+                        <p><strong>Enfoque:</strong> Perfeccionar técnica en todos los ejercicios.</p>
+                        <p><strong>Cardio:</strong> Trote en rango bajo (20 min en vez de 25).</p>
+                        <p><strong>Saco:</strong> Énfasis en técnica, no en potencia.</p>
+                        <p><strong>Objetivo:</strong> Acostumbrar al cuerpo al volumen y estructura.</p>
+                    </div>
+
+                    <div class="week-item">
+                        <h4>🔹 Semanas 3-4: CONSTRUCCIÓN</h4>
+                        <p><strong>Pesas:</strong> Rango medio-alto de repeticiones.</p>
+                        <p><strong>Peso:</strong> 75-80% de tu máximo.</p>
+                        <p><strong>Enfoque:</strong> Aumenta volumen total (añade 1 serie a ejercicios principales).</p>
+                        <p><strong>Cardio:</strong> Alcanza rango alto de minutos (25-30 min trote).</p>
+                        <p><strong>Saco:</strong> Aumenta intensidad en rounds de potencia.</p>
+                        <p><strong>Objetivo:</strong> Construir base sólida de fuerza y resistencia.</p>
+                    </div>
+
+                    <div class="week-item">
+                        <h4>🔹 Semanas 5-6: INTENSIFICACIÓN</h4>
+                        <p><strong>Pesas:</strong> Rango alto de repeticiones + peso máximo manejable.</p>
+                        <p><strong>Peso:</strong> 80-85% de tu máximo.</p>
+                        <p><strong>Enfoque:</strong> Velocidad explosiva manteniendo técnica perfecta.</p>
+                        <p><strong>Descansos:</strong> Reduce 15-20 segundos en ejercicios de saco.</p>
+                        <p><strong>Sábado:</strong> Intenta completar el circuito más rápido que semanas anteriores.</p>
+                        <p><strong>Objetivo:</strong> Empujar límites sin comprometer recuperación.</p>
+                    </div>
+
+                    <div class="week-item">
+                        <h4>🔹 Semana 7: DELOAD (Descarga)</h4>
+                        <p><strong>Pesas:</strong> Reduce peso a 60-65% y baja 1 serie por ejercicio.</p>
+                        <p><strong>Enfoque:</strong> Movimientos perfectos, sin fatiga extrema.</p>
+                        <p><strong>Cardio:</strong> Reduce 20-30% del volumen habitual.</p>
+                        <p><strong>Saco:</strong> Solo técnica pura, sin potencia máxima.</p>
+                        <p><strong>Objetivo:</strong> Recuperación completa para volver más fuerte.</p>
+                    </div>
+
+                    <div class="week-item">
+                        <h4>🔹 Semana 8+: RENDIMIENTO PICO</h4>
+                        <p><strong>Pesas:</strong> 85-90% de tu máximo en levantamientos principales.</p>
+                        <p><strong>Volumen:</strong> Máximo de repeticiones y series.</p>
+                        <p><strong>Intensidad:</strong> Todo al 90-95% de esfuerzo.</p>
+                        <p><strong>Desafío sábado:</strong> 100 burpees bajo 10 minutos.</p>
+                        <p><strong>Objetivo:</strong> Operar como máquina de combate afinada.</p>
+                    </div>
+
+                    <div class="week-item">
+                        <h4>⚡ PRINCIPIOS FUNDAMENTALES</h4>
+                        <p><strong>Sobrecarga progresiva:</strong> Cada semana debe ser más dura que la anterior (más peso, más reps, menos descanso).</p>
+                        <p><strong>Prioriza técnica:</strong> Peso extra sin técnica = lesión y retroceso.</p>
+                        <p><strong>Escucha tu cuerpo:</strong> Dolor muscular = normal. Dolor articular = frena.</p>
+                        <p><strong>Deload obligatorio:</strong> Cada 6-8 semanas, toma 1 semana al 60% para recuperar totalmente.</p>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="info-box">
+                <h3>🎯 CIENCIA DEL ENTRENAMIENTO PARA COMBATE</h3>
+                <ul>
+                    <li><strong>¿Por qué pesas primero y luego cardio?</strong> Hacer fuerza primero agota glucógeno muscular. Cuando haces cardio después, tu cuerpo quema más grasa como combustible. Además, levantar pesado requiere sistema nervioso fresco para evitar lesiones.</li>
+                    <li><strong>Saco de boxeo diario:</strong> Los peleadores de élite trabajan saco 5-6 días/semana. Desarrolla memoria muscular, timing, potencia de hombros y cardio específico que el trote solo no puede dar.</li>
+                    <li><strong>Trote diario (20-35 min):</strong> Construye base aeróbica masiva. Estudios muestran que atletas de combate con mejor VO2 max dominan en rounds tardíos. El trote constante es tu tanque de gasolina.</li>
+                    <li><strong>Días de descanso activo:</strong> El domingo no entrenas duro, pero mueves el cuerpo. Esto acelera recuperación comparado con estar completamente sedentario.</li>
+                    <li><strong>Ejercicios multiarticulares:</strong> Sentadillas, peso muerto, press banca, dominadas. Estos son la base porque activan más músculo, queman más calorías y se transfieren directamente a movimientos de combate.</li>
+                    <li><strong>Core antirotacional:</strong> Pallof press, dead bugs, planchas. Estos ejercicios te enseñan a resistir fuerzas, absorbiendo golpes y generando potencia sin lesionarte.</li>
+                </ul>
+            </div>
+
+            <div class="info-box">
+                <h3>🔥 QUEMA DE GRASA + CONSTRUCCIÓN MUSCULAR</h3>
+                <ul>
+                    <li><strong>Déficit calórico inteligente:</strong> Come 300-500 calorías bajo tu mantenimiento. Más agresivo = pierdes músculo. Menos agresivo = progreso muy lento.</li>
+                    <li><strong>Proteína alta:</strong> 2-2.5g por kg de peso corporal. Esto preserva músculo mientras pierdes grasa. Prioriza: pollo, pescado, huevos, carne magra.</li>
+                    <li><strong>Carbohidratos estratégicos:</strong> Mayoría de carbos alrededor de entrenamientos (antes y después). Esto alimenta rendimiento sin acumular grasa.</li>
+                    <li><strong>Grasas saludables:</strong> No las elimines. Aguacate, nueces, aceite de oliva. Necesitas grasa para producir testosterona y recuperar articulaciones.</li>
+                    <li><strong>Timing no es tan crítico:</strong> Lo que importa es el total diario. Pero comer proteína post-entreno (dentro de 2h) ayuda a recuperación.</li>
+                    <li><strong>Hidratación brutal:</strong> Mínimo 3-4 litros de agua al día. Deshidratación = rendimiento destruido y recuperación lenta.</li>
+                </ul>
+            </div>
+
+            <div class="info-box">
+                <h3>💤 RECUPERACIÓN: DONDE TE HACES MÁS FUERTE</h3>
+                <ul>
+                    <li><strong>Sueño 7-9 horas:</strong> No negociable. Durante sueño profundo produces hormona de crecimiento y reparas tejido. Sin sueño, no hay progreso.</li>
+                    <li><strong>Gestión de estrés:</strong> Cortisol alto (estrés crónico) destruye músculo y acumula grasa abdominal. Meditación, respiración, tiempo en naturaleza.</li>
+                    <li><strong>Foam rolling y estiramientos:</strong> No son opcionales. Previenen lesiones, mejoran rango de movimiento y aceleran recuperación.</li>
+                    <li><strong>Días de deload:</strong> Cuando notes 3+ signos (fatiga extrema, insomnio, rendimiento bajo, irritabilidad), toma 2-3 días al 60% de intensidad.</li>
+                    <li><strong>Baños de contraste:</strong> Si tienes acceso: 3 min caliente, 1 min frío, repetir 3 veces. Reduce inflamación y acelera recuperación.</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- ============================================ -->
+        <!-- SECCIÓN: GUÍA DE EJERCICIOS -->
+        <!-- ============================================ -->
+        <div id="guia" style="display: none;">
+            
+            <div class="info-box">
+                <h3>🏋️ EJERCICIOS DE PESAS - GUÍA TÉCNICA</h3>
+                <ul style="line-height: 2.2;">
+                    <li><strong>Sentadilla Trasera:</strong> Barra sobre trapecios, pies ancho de hombros, baja hasta muslos paralelos al suelo. Mantén pecho alto, core apretado. Empuja con talones al subir.</li>
+                    <li><strong>Peso Muerto Convencional:</strong> Barra sobre el piso, agarre ancho de hombros, espalda plana. Empuja el suelo con piernas mientras mantienes barra pegada al cuerpo. Cadera y hombros suben juntos.</li>
+                    <li><strong>Press Banca:</strong> Acostado, agarre ligeramente más ancho que hombros. Baja barra controlada a pecho medio, empuja explosivo. Mantén escápulas retraídas (hombros hacia atrás).</li>
+                    <li><strong>Press Militar de Pie:</strong> Barra al frente de hombros, codos adelante. Empuja barra arriba en línea recta, lleva cabeza hacia adelante al pasar barra. Core MUY apretado para proteger lumbar.</li>
+                    <li><strong>Dominadas:</strong> Agarre pronado (palmas alejadas), ancho de hombros. Tira con codos hacia abajo, lleva pecho a barra. Baja controlado hasta brazos extendidos.</li>
+                    <li><strong>Remo con Barra (Pendlay):</strong> Torso paralelo al suelo, barra en suelo entre reps. Tira explosivo hasta toca abdomen bajo, baja controlado. Mantén espalda plana.</li>
+                    <li><strong>Sentadilla Frontal:</strong> Barra sobre deltoides anteriores, codos ALTOS. Desciende manteniendo torso muy erguido. Más énfasis en cuádriceps y core que sentadilla trasera.</li>
+                    <li><strong>Peso Muerto Rumano:</strong> Empieza de pie con barra. Empuja cadera atrás manteniendo piernas casi rectas (ligera flexión). Barra baja pegada a piernas hasta media tibia. Siente estiramiento en femorales.</li>
+                    <li><strong>Power Clean (Cargada):</strong> Movimiento explosivo: peso muerto + encogimiento + salto + recepción en hombros. TÉCNICA COMPLEJA. Si no dominas, reemplaza con kettlebell swings pesados.</li>
+                    <li><strong>Landmine Press:</strong> Barra en esquina, agarra el otro extremo. Empuja en diagonal mientras rotas tronco. Simula perfectamente mecánica de golpe cruzado.</li>
+                    <li><strong>Box Jumps:</strong> Salta explosivo a cajón/plataforma. Aterriza suave con rodillas flexionadas. Baja con control (no saltes hacia abajo para prevenir lesiones).</li>
+                </ul>
+            </div>
+
+            <div class="info-box">
+                <h3>🥊 TÉCNICA DE SACO Y SHADOW BOXING</h3>
+                <ul style="line-height: 2.2;">
+                    <li><strong>Stance básico (ortodoxo):</strong> Pie izquierdo adelante (si eres diestro), pies ancho de hombros. Peso distribuido 60% pierna trasera. Rodillas ligeramente flexionadas. Manos arriba protegiendo mentón.</li>
+                    <li><strong>Jab:</strong> Golpe recto con brazo adelantado. Rápido y explosivo. Extiende brazo completamente, rota hombro. Puño vuelve rápido a proteger cara. Usalo para medir distancia.</li>
+                    <li><strong>Cross (Recto de derecha):</strong> Golpe de poder. Rota cadera y pie trasero simultáneamente. Todo el peso del cuerpo va al golpe. Hombro llega al mentón para protección.</li>
+                    <li><strong>Hook (Gancho):</strong> Codo a 90°, gira desde cintura. No es solo brazo, es rotación total de cuerpo. Hook frontal (va directo) o lateral (más amplio para costillas).</li>
+                    <li><strong>Uppercut:</strong> Golpe ascendente. Flexiona piernas ligeramente, empuja con piernas mientras lanzas puño hacia arriba. Perfecto para distancia corta o bajo la guardia.</li>
+                    <li><strong>Movimiento de pies:</strong> Nunca cruces pies. Avanza: pie adelantado da paso, trasero sigue. Retrocede: pie trasero va primero. Mantén siempre base estable.</li>
+                    <li><strong>Respiración en saco:</strong> Exhala explosivamente en cada golpe ("tsss" o "osh"). Esto protege core y genera más potencia. Nunca aguantes respiración.</li>
+                    <li><strong>Rounds de técnica:</strong> Enfoque en forma perfecta. Velocidad controlada al 70%. Visualiza oponente, reacciona a golpes imaginarios, practica defensas (slip, roll, block).</li>
+                    <li><strong>Rounds de potencia:</strong> Cada golpe con intención de KO. Descanso entre combos. Calidad sobre cantidad. Siente la transferencia de peso del cuerpo.</li>
+                    <li><strong>Rounds de resistencia:</strong> Volumen alto sin parar. Combos de 4-6 golpes continuos. Simula estar en round 4-5 de una pelea donde estás cansado pero debes mantener ritmo.</li>
+                </ul>
+            </div>
+
+            <div class="info-box">
+                <h3>🏃 TRABAJO DE CARDIO Y CONDICIONAMIENTO</h3>
+                <ul style="line-height: 2.2;">
+                    <li><strong>Trote continuo (steady state):</strong> Ritmo donde puedes mantener conversación. Respiración por nariz ideal. Este cardio construye base aeróbica y quema grasa eficientemente.</li>
+                    <li><strong>Fartlek (juego de velocidades):</strong> Alterna ritmos durante trote: 2 min cómodo + 1 min rápido + 30 seg sprint. Repite. Entrena diferentes sistemas energéticos.</li>
+                    <li><strong>Sprints en colina/caminadora inclinada:</strong> 20-30 seg máximo esfuerzo, camina recuperación. Desarrolla potencia de piernas y capacidad anaeróbica.</li>
+                    <li><strong>Burpees:</strong> Parado → agáchate manos al suelo → salta pies atrás (posición flexión) → flexión → salta pies adelante → salto arriba. Ejercicio funcional total.</li>
+                    <li><strong>Mountain climbers:</strong> Posición de flexión, lleva rodillas alternadas al pecho rápidamente. Mantén cadera baja, core apretado.</li>
+                    <li><strong>Kettlebell swings:</strong> Bisagra de cadera explosiva. Empuja cadera adelante con potencia, kettlebell sube por inercia hasta hombros. NO es ejercicio de brazos, es de cadera.</li>
+                    <li><strong>Battle ropes:</strong> Cuerdas pesadas, alternadas o juntas. Ondas explosivas. Trabajo brutal de hombros, core y cardio.</li>
+                    <li><strong>Assault bike/Air bike:</strong> Bici con brazos móviles. Resistencia aumenta con tu intensidad. Perfecta para intervalos: 20 seg máximo / 40 seg suave.</li>
+                    <li><strong>Remo ergómetro:</strong> Máquina de remo. Piernas empujan primero, luego brazos jalan. Movimiento fluido. Cardio brutal de cuerpo completo con bajo impacto.</li>
+                </ul>
+            </div>
+
+            <div class="info-box">
+                <h3>🧘 MOVILIDAD Y TRABAJO DE SUELO MMA</h3>
+                <ul style="line-height: 2.2;">
+                    <li><strong>Shrimp (camarón):</strong> Acostado boca arriba, gira cadera hacia un lado empujando con pie opuesto. Crea espacio para escapar de posiciones malas en suelo.</li>
+                    <li><strong>Technical stand-up:</strong> Desde sentado: una mano atrás como base, pie cerca de glúteo. Empuja con mano y pie, levántate manteniendo mano libre protegiendo cara.</li>
+                    <li><strong>Sprawl:</strong> Defensa anti-derribo. Cuando "atacan" tus piernas: lanza cadera atrás explosivamente, piernas atrás, aplasta con peso en espalda del oponente. Manos en suelo.</li>
+                    <li><strong>Hip escape:</strong> Similar a shrimp pero con más desplazamiento. Empuja con manos y pies para deslizar cadera lateralmente. Fundamental para defensa en suelo.</li>
+                    <li><strong>Cossack squat:</strong> Sentadilla lateral profunda. Una pierna flexionada, otra extendida al lado. Mejora movilidad de cadera para patadas y movimientos laterales.</li>
+                    <li><strong>90/90 hip switches:</strong> Sentado, ambas piernas a 90°. Gira cadera para cambiar piernas de posición. Movilidad de cadera brutal para peleadores.</li>
+                    <li><strong>World's greatest stretch:</strong> Zancada profunda + rotación de torso + alcance al cielo. Estira TODO: cadera, isquios, torso, hombros. Úsalo en calentamientos.</li>
+                    <li><strong>Pigeon pose:</strong> Pierna adelante doblada, pierna trasera extendida. Torso hacia suelo. Estiramiento profundo de cadera y glúteo. Esencial para flexibilidad de patadas.</li>
+                    <li><strong>Child's pose:</strong> Rodillas al suelo, glúteos a talones, brazos extendidos adelante. Estira espalda baja y relaja sistema nervioso.</li>
+                    <li><strong>Cat-cow (gato-camello):</strong> Cuatro puntos, alterna arquear espalda (mirar arriba) y redondear espalda (mirar ombligo). Moviliza toda la columna.</li>
+                </ul>
+            </div>
+
+            <div class="info-box">
+                <h3>💪 EJERCICIOS FUNCIONALES Y CORE</h3>
+                <ul style="line-height: 2.2;">
+                    <li><strong>Pallof press:</strong> Cable a altura de pecho, parado lateral. Empuja cable adelante resistiendo rotación. Core antirotacional puro. Esencial para peleadores.</li>
+                    <li><strong>Dead bug:</strong> Espalda plana en suelo, piernas arriba. Baja brazo y pierna opuesta sin arquear lumbar. Enseña a estabilizar core bajo movimiento.</li>
+                    <li><strong>Bird dog:</strong> Cuatro puntos. Extiende brazo y pierna opuesta manteniendo espalda estable. Equilibrio + core + coordinación.</li>
+                    <li><strong>Hollow body hold:</strong> Acostado, eleva piernas y hombros del suelo. Lumbar pegada al suelo. Posición base de gimnasia. Core brutal.</li>
+                    <li><strong>Plancha con toque de hombro:</strong> Posición de flexión, alterna tocar hombro opuesto con mano. Minimiza rotación de cadera. Anti-rotación + estabilidad.</li>
+                    <li><strong>V-ups:</strong> Acostado, sube simultáneamente piernas y torso formando V. Toca pies con manos. Core completo (recto abdominal + flexores de cadera).</li>
+                    <li><strong>Giros rusos:</strong> Sentado, pies elevados, rota torso tocando suelo a cada lado. Con peso adicional si es fácil. Potencia rotacional para golpes.</li>
+                    <li><strong>Plancha lateral:</strong> Apoyo en un antebrazo, cuerpo en línea recta lateral. Mantén cadera alta. Core lateral (oblicuos) + estabilidad de hombro.</li>
+                    <li><strong>Farmer's walk:</strong> Agarra pesos pesados (mancuernas/kettlebells), camina manteniendo postura erguida. Core, agarre, trampecios, piernas. Fuerza funcional total.</li>
+                    <li><strong>Turkish get-up:</strong> Complejo: acostado con peso arriba, levántate pasando por varias posiciones. Movilidad + estabilidad + fuerza. Avanzado pero brutal.</li>
+                </ul>
+            </div>
+
+        </div>
+
+        <!-- ============================================ -->
+        <!-- INFORMACIÓN FINAL -->
+        <!-- ============================================ -->
+        
+        <div class="info-box">
+            <h3>⚠️ SEÑALES DE SOBREENTRENAMIENTO</h3>
+            <ul>
+                <li><strong>Pulso en reposo elevado:</strong> Si al despertar tu frecuencia cardíaca está 10+ latidos sobre lo normal, necesitas descanso.</li>
+                <li><strong>Dolor articular persistente:</strong> Dolor muscular es normal (DOMS). Dolor en articulaciones es señal de alarma. Toma 2-3 días de recuperación.</li>
+                <li><strong>Insomnio o sueño inquieto:</strong> El sobreentrenamiento causa problemas de sueño por cortisol elevado. Reduce volumen inmediatamente.</li>
+                <li><strong>Pérdida de motivación severa:</strong> Si 3+ días seguidos no quieres entrenar (no es pereza, es apatía real), tu sistema nervioso necesita descanso.</li>
+                <li><strong>Rendimiento estancado o bajando:</strong> Si tus números bajan 2 semanas seguidas, necesitas deload o descanso completo.</li>
+                <li><strong>Enfermarte frecuentemente:</strong> Sistema inmune comprometido. Prioriza descanso, nutrición y recuperación sobre seguir entrenando.</li>
+                <li><strong>Irritabilidad extrema:</strong> Sobreentrenamiento afecta hormonas y sistema nervioso. Si estás constantemente irritable, es señal de fatiga profunda.</li>
+            </ul>
+        </div>
+
+        <div class="final-box">
+            <h2>⚔️ EL CÓDIGO DEL GUERRERO</h2>
+            <p>
+                "Este gimnasio es tu dojo. El saco es tu oponente. El trote es tu meditación.<br>
+                Las pesas forjan tu armadura. La técnica es tu espada.<br><br>
+                No entrenas para verte bien en el espejo.<br>
+                Entrenas para convertirte en una fuerza imparable de la naturaleza.<br><br>
+                <strong>Cada día que cumples esta rutina, te acercas más al guerrero que naciste para ser.</strong><br><br>
+                💪 Ahora deja de leer y ve a conquistar tu destino. 🔥
+            </p>
+        </div>
+
+    </div>
+
+    <script>
+        function showSection(section) {
+            // Ocultar todas las secciones
+            document.getElementById('semana').style.display = 'none';
+            document.getElementById('progresion').style.display = 'none';
+            document.getElementById('guia').style.display = 'none';
+
+            // Remover clase active de todos los botones
+            const buttons = document.querySelectorAll('.tab-btn');
+            buttons.forEach(btn => btn.classList.remove('active'));
+
+            // Mostrar sección correspondiente y activar botón
+            if (section === 'semana') {
+                document.getElementById('semana').style.display = 'block';
+                buttons[0].classList.add('active');
+            } else if (section === 'progresion') {
+                document.getElementById('progresion').style.display = 'block';
+                buttons[1].classList.add('active');
+            } else if (section === 'guia') {
+                document.getElementById('guia').style.display = 'block';
+                buttons[2].classList.add('active');
+            }
+        }
+    </script>
+</body>
+</html>
